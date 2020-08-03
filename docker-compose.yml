@@ -1,0 +1,23 @@
+version: '3'
+services: 
+  postgres:
+    image: postgres
+    env_file:
+     - environment.env
+    volumes:
+     - db-data:/var/lib/postgres/data/
+     #- ./schema.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - mynetwork
+volumes:
+  db-data:
+
+networks:
+  mynetwork:
+    driver: bridge
+
+
+
+
