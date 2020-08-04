@@ -6,7 +6,7 @@ services:
      - environment.env
     volumes:
      - db-data:/var/lib/postgres/data/
-     #- ./schema.sql:/docker-entrypoint-initdb.d/init.sql
+     - ./schema.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5432:5432"
     networks:
