@@ -12,7 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.brascoffee.abst.AbstractBeverage;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 @Table(name = "BEVERAGE")
@@ -26,8 +27,9 @@ public class Beverage extends AbstractBeverage {
 	@Column(name = "cost")
 	private BigDecimal cost;
 	
+	
+	
 	@Transient
-	@JsonIgnore
 	private List<Condiment>condiments;
 
 	public String getDescription() {
@@ -53,7 +55,7 @@ public class Beverage extends AbstractBeverage {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+    @JsonInclude(Include.NON_NULL)
 	public List<Condiment> getCondiments() {
 		return condiments;
 	}

@@ -12,11 +12,13 @@ import javax.persistence.Transient;
 
 import com.brascoffee.abst.AbstractBeverage;
 import com.brascoffee.abst.AbstractCondimentDecorator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "CONDIMENT")
 public class Condiment extends AbstractCondimentDecorator {
 	@Transient
+	@JsonIgnore
 	private AbstractBeverage beverage;
 
 	@Id
@@ -34,10 +36,12 @@ public class Condiment extends AbstractCondimentDecorator {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
 
 	public String getDescription() {
-		return beverage.getDescription() + " + " + description;
+		return description;
 	}
+
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -64,5 +68,13 @@ public class Condiment extends AbstractCondimentDecorator {
 	public void setBeverage(AbstractBeverage beverage) {
 		this.beverage = beverage;
 	}
+
+	@Override
+	public String description() {
+		// TODO Auto-generated method stub
+		return beverage.getDescription() + "+" + description;
+	}
+
+
 
 }
