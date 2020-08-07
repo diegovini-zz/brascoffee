@@ -54,9 +54,9 @@ public class BeverageOrderController {
 	}
 	
 	@PostMapping(value="/orders")
-	public BeverageOrder placeOrder(@RequestBody BeverageOrder beverageOrder) {
+	public List<BeverageOrder> placeOrder(@RequestBody List<BeverageOrder> beverageOrders) {
 		
-		return beverageOrderService.placeOrder(beverageOrder);
+		return beverageOrderService.placeOrder(beverageOrders);
 		
 	}
 

@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "BEVERAGE_ORDER")
 public class BeverageOrder {
@@ -60,6 +62,7 @@ public class BeverageOrder {
 		return finalPrice;
 	}
 
+	
 	public void setFinalPrice(BigDecimal finalPrice) {
 		this.finalPrice = finalPrice;
 	}
