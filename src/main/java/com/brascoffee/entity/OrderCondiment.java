@@ -11,17 +11,19 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @Entity
-@Table(name = "CONDIMENT_ORDER")
-public class CondimentOrder {
+@Table(name = "ORDERS_CONDIMENT")
+public class OrderCondiment {
 	
 	
-	public CondimentOrder() {
+	public OrderCondiment() {
 		
 	}
 	
-	public CondimentOrder(BeverageOrder beverageOrder) {
+	public OrderCondiment(Order beverageOrder) {
 		
 		this.beverageOrder = beverageOrder;
 	}
@@ -32,13 +34,13 @@ public class CondimentOrder {
 
 	@OneToOne
 	@JoinColumn(name = "condiment_id",referencedColumnName = "id")
-	
+	@JsonProperty(value = "")
 	private Condiment condiment;
 
 	@ManyToOne(fetch =FetchType.LAZY )
-	@JoinColumn(name = "beverageorder_id")
+	@JoinColumn(name = "order_id")
 	@JsonBackReference
-	private BeverageOrder beverageOrder;
+	private Order beverageOrder;
 
 	public long getId() {
 		return id;
@@ -56,11 +58,11 @@ public class CondimentOrder {
 		this.condiment = condiment;
 	}
 
-	public BeverageOrder getBeverageOrder() {
+	public Order getBeverageOrder() {
 		return beverageOrder;
 	}
 
-	public void setBeverageOrder(BeverageOrder beverageOrder) {
+	public void setBeverageOrder(Order beverageOrder) {
 		this.beverageOrder = beverageOrder;
 	};
 

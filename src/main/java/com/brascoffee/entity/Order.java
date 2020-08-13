@@ -14,11 +14,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 @Entity
-@Table(name = "BEVERAGE_ORDER")
-public class BeverageOrder {
+@Table(name = "ORDERS")
+public class Order {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -26,10 +24,10 @@ public class BeverageOrder {
 	
 	@OneToOne
 	@JoinColumn(name = "beverage_id",referencedColumnName = "id")
-	private Beverage orderedBeverage;
+	private Beverage beverage;
 	
 	@OneToMany(mappedBy = "beverageOrder",cascade = CascadeType.ALL)
-	private List<CondimentOrder> orderedCondiments;
+	private List<OrderCondiment> condiments;
 	
 	@Column(name="final_price")
 	private BigDecimal finalPrice;
@@ -42,20 +40,20 @@ public class BeverageOrder {
 		this.id = id;
 	}
 
-	public Beverage getOrderedBeverage() {
-		return orderedBeverage;
+	public Beverage getBeverage() {
+		return beverage;
 	}
 
-	public void setOrderedBeverage(Beverage orderedBeverage) {
-		this.orderedBeverage = orderedBeverage;
+	public void setBeverage(Beverage beverage) {
+		this.beverage = beverage;
 	}
 
-	public List<CondimentOrder> getOrderedCondiments() {
-		return orderedCondiments;
+	public List<OrderCondiment> getCondiments() {
+		return condiments;
 	}
 
-	public void setOrderedCondiments(List<CondimentOrder> orderedCondiments) {
-		this.orderedCondiments = orderedCondiments;
+	public void setCondiments(List<OrderCondiment> orderedCondiments) {
+		this.condiments = orderedCondiments;
 	}
 
 	public BigDecimal getFinalPrice() {
