@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 
 import com.brascoffee.abst.AbstractBeverage;
 import com.brascoffee.abst.AbstractCondimentDecorator;
@@ -24,10 +25,23 @@ public class Condiment extends AbstractCondimentDecorator {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@Column(name = "description")
+	@NotNull(message="The description must not be empty")
 	private String description;
+	
+	@NotNull(message="The cost must not be empty")
 	@Column(name = "cost")
 	private BigDecimal cost;
+	
+	public Condiment() {
+		
+	}
+
+	public Condiment(String description, BigDecimal cost) {
+		this.description = description;
+		this.cost = cost;
+	}
 
 	public Long getId() {
 		return id;

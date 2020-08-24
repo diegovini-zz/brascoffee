@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "ORDERS")
@@ -24,6 +25,7 @@ public class Order {
 	
 	@OneToOne
 	@JoinColumn(name = "beverage_id",referencedColumnName = "id")
+	@NotNull(message="The beverage must not be empty")
 	private Beverage beverage;
 	
 	@OneToMany(mappedBy = "beverageOrder",cascade = CascadeType.ALL)
@@ -31,6 +33,10 @@ public class Order {
 	
 	@Column(name="final_price")
 	private BigDecimal finalPrice;
+	
+	@OneToOne
+	@JoinColumn(name="user_id",referencedColumnName = "id")
+	private User user;
 
 	public long getId() {
 		return id;
@@ -63,6 +69,14 @@ public class Order {
 	
 	public void setFinalPrice(BigDecimal finalPrice) {
 		this.finalPrice = finalPrice;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 

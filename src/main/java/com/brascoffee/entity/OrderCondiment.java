@@ -23,10 +23,12 @@ public class OrderCondiment {
 		
 	}
 	
-	public OrderCondiment(Order beverageOrder) {
+	public OrderCondiment(Order beverageOrder, Condiment condiment) {
 		
 		this.beverageOrder = beverageOrder;
+		this.condiment = condiment;
 	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

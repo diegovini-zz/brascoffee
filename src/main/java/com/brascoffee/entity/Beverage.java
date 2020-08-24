@@ -10,10 +10,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import com.brascoffee.abst.AbstractBeverage;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+
+import net.bytebuddy.implementation.bind.annotation.Empty;
 
 @Entity
 @Table(name = "BEVERAGE")
@@ -21,16 +26,31 @@ public class Beverage extends AbstractBeverage {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private int id;
+	private long id;
+	
+	@NotNull(message="The description must not be empty")
 	@Column(name = "description")
 	private String description;
+	
+	@NotNull(message="The price must not be empty")
 	@Column(name = "cost")
 	private BigDecimal cost;
+
 	
-	
-	
+
 	@Transient
-	private List<Condiment>condiments;
+	private List<Condiment> condiments;
+	
+	public Beverage() {
+
+	}
+
+	public Beverage(String description, BigDecimal cost, List<Condiment> condiments) {
+		super();
+		this.description = description;
+		this.cost = cost;
+		this.condiments = condiments;
+	}
 
 	public String getDescription() {
 		return description;
@@ -48,14 +68,15 @@ public class Beverage extends AbstractBeverage {
 		this.cost = cost;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
-    @JsonInclude(Include.NON_NULL)
+
+	@JsonInclude(Include.NON_NULL)
 	public List<Condiment> getCondiments() {
 		return condiments;
 	}

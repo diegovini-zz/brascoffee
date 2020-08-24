@@ -20,6 +20,20 @@ public class User {
 	
 	@Column(name="password")
 	private String password;
+	
+	
+	
+	
+
+	public User() {
+		super();
+	}
+
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
 
 	public long getId() {
 		return id;

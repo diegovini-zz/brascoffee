@@ -24,6 +24,7 @@ public class OrderService {
 			if (beverageOrder.getCondiments() != null) {
 
 				for (OrderCondiment condimentOrder : beverageOrder.getCondiments()) {
+					condimentOrder.setBeverageOrder(beverageOrder);
 					condimentOrder.getCondiment().setBeverage(decoratedBeverage);
 					decoratedBeverage = condimentOrder.getCondiment();
 
