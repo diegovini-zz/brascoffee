@@ -7,18 +7,18 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import javax.activity.InvalidActivityException;
 import javax.validation.ConstraintViolationException;
 
+import org.hibernate.exception.spi.ViolatedConstraintNameExtracter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.brascoffee.entity.Beverage;
 import com.brascoffee.entity.Condiment;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BeverageRepositoryTest {
 
 	@Autowired
@@ -32,6 +32,15 @@ class BeverageRepositoryTest {
 		Beverage createdBeverave = this.beverageRepository.save(beverage);
 
 		assertEquals(createdBeverave, beverage);
+	}
+	
+	@Test
+	void saveBeverageShouldThrowExceptionWhenDescriptionIsNull(){
+		Beverage beverage = new Beverage(null, BigDecimal.valueOf(2),
+				Arrays.asList(new Condiment(), new Condiment()));
+
+
+		assertThrows(ConstraintViolationException.class, () -> this.beverageRepository.save(beverage)).getMessage();
 	}
 
 	@Test

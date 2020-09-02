@@ -3,12 +3,14 @@ package com.brascoffee.controller;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -67,7 +69,7 @@ class OrderControllerTest {
 
 	@Test
 	@WithMockUser(username = "Mockedused")
-	public void placeOrderShouldReturnHttpCreated201WhenAuthenticated() throws Exception {
+	public void placeOrderShouldReturnHttpCreated201WhenOrderIsCreatedAndAuthenticated() throws Exception {
 		List<Order> postedOrderList = new ArrayList<Order>();
 		
 		Order order = new Order();
@@ -86,16 +88,46 @@ class OrderControllerTest {
 		order.setCondiments(orderedCondimentsList );
 		
 		postedOrderList.add(order);
+		
+		List<Order> expectedListOrder = new ArrayList<Order>();
+		order.setId(1L);
+		expectedListOrder.add(order);
+		
+		Mockito.when(orderService.placeOrder(Mockito.anyList())).thenReturn(expectedListOrder);
 
 		mockMvc.perform(post(("/orders"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON)
 				.content(objectMapper.writeValueAsString(postedOrderList)))
-				.andExpect(status().isCreated());
+				.andExpect(status().isCreated())
+				.andExpect(content().json(objectMapper.writeValueAsString(expectedListOrder)));
 	}
 	
 	@Test
-	@WithMockUser(username = "Mockedused")
+	@WithMockUser(username = "MockedUser")
+	public void placeOrderShouldReturnHttpBadRequest400WhenPostedOrderListIsNullAndWhenAuthenticated() throws Exception {
+		List<Order> postedOrderList = null;
+		
+		mockMvc.perform(post(("/orders"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(postedOrderList)))
+				.andExpect(status().isBadRequest());
+	}
+	@Test
+	@WithMockUser(username = "MockedUser")
+	public void placeOrderShouldReturnHttpBadRequest400WhenPostedOrderListIsEmptyAndWhenAuthenticated() throws Exception {
+		List<Order> postedOrderList = new ArrayList<Order>();
+		
+		mockMvc.perform(post(("/orders"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON)
+				.content(objectMapper.writeValueAsString(postedOrderList)))
+				.andExpect(status().isBadRequest());
+	}
+	
+	@Test
+	@WithMockUser(username = "MockedUser")
 	public void placeOrderShouldReturnHttpBadRequest400WhenBeverageIsNullAndWhenAuthenticated() throws Exception {
 		List<Order> postedOrderList = new ArrayList<Order>();
 		
@@ -103,17 +135,17 @@ class OrderControllerTest {
 		OrderCondiment orderCondiment = new OrderCondiment();
 		Beverage beverage = null;
 		Condiment condiment = new Condiment("Condiment",BigDecimal.valueOf(2));
-				
-		orderCondiment.setBeverageOrder(order);
-		orderCondiment.setCondiment(condiment);
-		
-		List<OrderCondiment> orderedCondimentsList = new ArrayList<OrderCondiment>();
-		orderedCondimentsList .add(orderCondiment);
 		
 		order.setBeverage(beverage);
-		order.setCondiments(orderedCondimentsList );
+				
+		List<OrderCondiment> orderedCondimentsList = new ArrayList<OrderCondiment>();
+		orderCondiment.setBeverageOrder(order);
+		orderCondiment.setCondiment(condiment);
+		orderedCondimentsList .add(orderCondiment);
 		
+		order.setCondiments(orderedCondimentsList );
 		postedOrderList.add(order);
+		
 
 		mockMvc.perform(post(("/orders"))
 				.contentType(MediaType.APPLICATION_JSON)

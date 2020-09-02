@@ -3,6 +3,7 @@ package com.brascoffee.controller;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.brascoffee.entity.Order;
 import com.brascoffee.service.OrderService;
 
-@RestController
 @Validated
+@RestController
 public class OrderController {
 	@Autowired
 	OrderService beverageOrderService;
@@ -28,7 +29,8 @@ public class OrderController {
 	}
 
 	@PostMapping(value = "/orders")
-	public ResponseEntity<List<Order>> placeOrder(@RequestBody List<@Valid Order> order) {
+	
+	public ResponseEntity<List<Order>> placeOrder(@RequestBody @NotEmpty(message="Order list must not be empty") List<@Valid Order> order) {
 
 		
 		return new ResponseEntity<List<Order>>(beverageOrderService.placeOrder(order), HttpStatus.CREATED);

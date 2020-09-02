@@ -3,6 +3,8 @@ package com.brascoffee.exception;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.validation.ConstraintViolationException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,7 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 	
 	@Override
+	
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		//ApiErrorMessage apiErrorMessage = new ApiErrorMessage("Invalid arguments");
@@ -39,9 +42,16 @@ public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
 		});
 		return new ResponseEntity<>(errors, new HttpHeaders(), HttpStatus.BAD_REQUEST);
 	}
-
+	
+	
 	@ExceptionHandler({ Exception.class })
 	public ResponseEntity<Object> handleAnyException(Exception ex, WebRequest request) {
+		
+		if(ex instanceof ConstraintViolationException) {
+			ApiErrorResponse apiErrorResponse = new ApiErrorResponse(ex.getMessage());
+
+			return new ResponseEntity<>(apiErrorResponse, new HttpHeaders(), HttpStatus.BAD_REQUEST);
+		}
 
 		String errorDescription = ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : ex.toString();
 		ApiErrorResponse apiErrorResponse = new ApiErrorResponse("There was an error in your request");
