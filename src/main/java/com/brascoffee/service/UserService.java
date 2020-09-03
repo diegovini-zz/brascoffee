@@ -2,10 +2,14 @@ package com.brascoffee.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,7 +32,10 @@ public class UserService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = findUserByUsername(username).get();
 		
-		return new org.springframework.security.core.userdetails.User(user.getUsername() , user.getPassword(), new ArrayList<>());
+		List<GrantedAuthority> grantedauthorities = new ArrayList<GrantedAuthority>();	
+		user.getRoles().forEach(role -> grantedauthorities.add(new SimpleGrantedAuthority(role.getName())));
+		
+		return new org.springframework.security.core.userdetails.User(user.getUsername() , user.getPassword(), grantedauthorities);
 	}
 
 	public ResponseEntity<?> registerUser(User user) {
@@ -47,6 +54,11 @@ public class UserService implements UserDetailsService {
 	
 	public Optional<User> findUserByUsername(String username) {
 		return userRepository.findByusername(username);
+	}
+
+	public List<User> findAll() {
+		// TODO Auto-generated method stub
+		return userRepository.findAll();
 	}
 
 }

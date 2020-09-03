@@ -8,6 +8,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,8 +21,10 @@ import com.brascoffee.models.ApiErrorResponse;
 
 @ControllerAdvice
 public class DefaultExceptionHandler extends ResponseEntityExceptionHandler {
+	
+	
 
-	@ExceptionHandler({ BadCredentialsException.class })
+	@ExceptionHandler({ BadCredentialsException.class, AccessDeniedException.class })
 	public ResponseEntity<Object> handleBadCredentialsException(Exception ex, WebRequest request) {
 		String errorDescription = ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : ex.toString();
 		ApiErrorResponse apiErrorResponse = new ApiErrorResponse(errorDescription);
