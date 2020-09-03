@@ -23,6 +23,7 @@ public class BeverageController {
 	BeverageService beverageService;
 	
 	@GetMapping(value = "/beverages")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public List<Beverage> getAllBeverages() {
 		return beverageService.getAllBeverages();
 		
