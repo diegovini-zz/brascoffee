@@ -17,6 +17,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name = "USER_ACCOUNT")
@@ -29,9 +31,11 @@ public class User {
 	@Column(name = "username")
 	private String username;
 
+	@JsonProperty(access = Access.WRITE_ONLY)
 	@Column(name = "password")
 	private String password;
 
+	
 	@Fetch(FetchMode.JOIN)
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "USER_ACCOUNT_ROLES", 
@@ -56,7 +60,7 @@ public class User {
 	public void setId(long id) {
 		this.id = id;
 	}
-
+	
 	public String getUsername() {
 		return username;
 	}
@@ -64,11 +68,13 @@ public class User {
 	public void setUsername(String username) {
 		this.username = username;
 	}
- 
+	
+	
 	public String getPassword() {
 		return password;
 	}
 
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}

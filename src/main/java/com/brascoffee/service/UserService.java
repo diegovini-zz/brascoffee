@@ -61,4 +61,9 @@ public class UserService implements UserDetailsService {
 		return userRepository.findAll();
 	}
 
+	public ResponseEntity<User> getUserById(long userId) {
+		// TODO Auto-generated method stub
+		return ResponseEntity.ok(userRepository.findById(userId).get());
+	}
+
 }

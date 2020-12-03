@@ -7,12 +7,17 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.brascoffee.entity.User;
 import com.brascoffee.models.AuthenticationRequest;
 import com.brascoffee.models.AuthenticationResponse;
+import com.brascoffee.models.AuthenticationTokenRequest;
+import com.brascoffee.models.AuthenticationTokenResponse;
 import com.brascoffee.security.JwtUtil;
 import com.brascoffee.service.UserService;
 
@@ -44,9 +49,18 @@ public class authController {
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 		
 		final String jwt = jwtUtil.generateToken(userDetails);
+		final User user = userService.findUserByUsername(userDetails.getUsername()).get();
 
-		return ResponseEntity.ok(new AuthenticationResponse(jwt));
+		return ResponseEntity.ok(new AuthenticationResponse(jwt,user));
 
+	}
+	
+	@GetMapping(value="/user")
+	public ResponseEntity<?> getUsernameFromToken(@RequestHeader("Authorization") AuthenticationTokenRequest authenticationTokenRequest){
+		String username = jwtUtil.extractUsername(authenticationTokenRequest.getToken());
+		final User user = userService.findUserByUsername(username).get();
+		return ResponseEntity.ok(new AuthenticationTokenResponse(user));
+		
 	}
 
 }

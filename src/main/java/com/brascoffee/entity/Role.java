@@ -11,6 +11,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name="ROLES")
@@ -29,12 +31,12 @@ public class Role {
 	@JsonBackReference
 	private List<User> users;
 
-
+	@JsonIgnore
 	public long getId() {
 		return Id;
 	}
 
-
+	@JsonProperty
 	public void setId(long id) {
 		Id = id;
 	}
