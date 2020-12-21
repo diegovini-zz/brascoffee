@@ -25,4 +25,25 @@ public class CondimentService {
 		return condimentRepository.findAll();
 	}
 
+	public void deleteCondiment(long id) {
+		condimentRepository.deleteById(id);;
+	}
+
+	public Condiment getCondimentById(long id) {
+		return condimentRepository.findById(id).get()	;
+	}
+
+	public Condiment updateCondiment(long id, Condiment condiment) {
+//		Condiment persistedCondiment = getCondimentById(id);
+//		persistedCondiment.setDescription(condiment.getDescription());
+//		persistedCondiment.setCost(condiment.getCost());
+//		return condimentRepository.save(persistedCondiment);
+		
+		return condimentRepository.findById(id).map(persistedCondiment->{
+			persistedCondiment.setDescription(condiment.getDescription());
+			persistedCondiment.setCost(condiment.getCost());
+			return condimentRepository.save(persistedCondiment);
+		}).get();
+	}
+
 }
